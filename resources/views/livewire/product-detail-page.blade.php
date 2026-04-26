@@ -3,7 +3,11 @@
         <!-- Image Gallery -->
         <div class="relative group">
             <div class="aspect-square overflow-hidden bg-white shadow-2xl">
-                <img src="{{ isset($product->images[0]) ? $product->images[0] : 'https://via.placeholder.com/1200' }}" 
+                @php
+                    $productImage = isset($product->images[0]) ? $product->images[0] : 'https://via.placeholder.com/1200';
+                    $productImageUrl = str_starts_with($productImage, 'http') ? $productImage : asset($productImage);
+                @endphp
+                <img src="{{ $productImageUrl }}" 
                      class="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000">
             </div>
             

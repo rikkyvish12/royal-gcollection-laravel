@@ -78,6 +78,7 @@ class ProductResource extends Resource
                         Forms\Components\FileUpload::make('images')
                             ->image()
                             ->multiple()
+                            ->disk('uploads')
                             ->directory('products')
                             ->imageEditor()
                             ->reorderable()
@@ -94,6 +95,7 @@ class ProductResource extends Resource
             ->columns([
                 Tables\Columns\ImageColumn::make('images')
                     ->label('Image')
+                    ->disk('uploads')
                     ->circular()
                     ->getStateUsing(fn ($record) => $record->images[0] ?? null),
                 

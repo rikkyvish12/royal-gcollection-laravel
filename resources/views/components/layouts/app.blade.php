@@ -39,8 +39,8 @@
         </style>
         @livewireStyles
     </head>
-    <body class="bg-stone-50 font-sans text-royal-dark antialiased">
-        <nav class="bg-white text-royal-dark sticky top-0 z-50 shadow-md border-b border-stone-200">
+    <body class="bg-stone-50 font-sans text-royal-dark antialiased" x-data="{ showSearchModal: false, searchQuery: '' }">
+        <nav x-data="{ mobileMenuOpen: false }" class="bg-white text-royal-dark sticky top-0 z-50 shadow-md border-b border-stone-200">
             <div class="max-w-7xl mx-auto px-6">
                 <div class="flex justify-between items-center h-16">
                     <!-- Left: Logo -->
@@ -68,16 +68,22 @@
                     <!-- Right: Search, Wishlist, Profile, Cart -->
                     <div class="flex items-center space-x-6">
                         <!-- Search Bar -->
-                        <div class="hidden md:flex items-center bg-stone-100 rounded-full px-4 py-2 w-64">
-                            <input 
-                                type="text" 
-                                placeholder="Search entire store..." 
-                                class="bg-transparent border-none text-sm w-full focus:ring-0 focus:outline-none placeholder-stone-500 text-royal-dark"
-                            >
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-stone-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                        </div>
+                        <form action="{{ route('home') }}" method="GET" class="hidden md:flex items-center">
+                            <div class="relative">
+                                <input 
+                                    type="text" 
+                                    name="search" 
+                                    placeholder="Search entire store..." 
+                                    class="bg-stone-100 border-none rounded-full pl-4 pr-10 py-2 text-sm w-64 focus:ring-2 focus:ring-royal-gold focus:outline-none placeholder-stone-500 text-royal-dark"
+                                    value="{{ request()->get('search') }}"
+                                >
+                                <button type="submit" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-stone-500 hover:text-royal-gold transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </form>
 
                         <!-- Wishlist Icon -->
                         <a href="#" class="hidden md:block p-2 hover:bg-stone-100 rounded-full transition-all">
@@ -124,12 +130,83 @@
                             </form>
                         @endauth
 
-                        <!-- Mobile Menu Button -->
-                        <button class="md:hidden p-2 text-royal-dark">
+                        <!-- Mobile Search Button (Visible only on mobile) -->
+                        <button 
+                            @click="showSearchModal = true"
+                            class="md:hidden p-2 text-royal-dark focus:outline-none"
+                            aria-label="Search"
+                        >
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
                         </button>
+                        
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Mobile Search Modal -->
+            <div 
+                x-show="showSearchModal"
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 scale-95"
+                x-transition:enter-end="opacity-100 scale-100"
+                x-transition:leave="transition ease-in duration-200"
+                x-transition:leave-start="opacity-100 scale-100"
+                x-transition:leave-end="opacity-0 scale-95"
+                class="fixed inset-0 z-50 overflow-y-auto"
+                style="display: none;"
+            >
+                <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                    <div class="fixed inset-0 transition-opacity" @click="showSearchModal = false">
+                        <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+                    </div>
+                    
+                    <span class="hidden sm:inline-block sm:align-middle sm:h-screen"></span>&#8203;
+                    
+                    <div 
+                        class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+                        @click.away="showSearchModal = false"
+                        x-show="showSearchModal"
+                    >
+                        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                            <div class="sm:flex sm:items-start">
+                                <div class="w-full mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                                    <h3 class="text-lg leading-6 font-medium text-royal-dark mb-4">
+                                        Search Products & Categories
+                                    </h3>
+                                    <form action="{{ route('home') }}" method="GET">
+                                        <div class="mt-2">
+                                            <input 
+                                                type="text" 
+                                                name="search" 
+                                                placeholder="Search entire store..." 
+                                                class="w-full px-4 py-3 border border-stone-200 rounded-lg focus:ring-2 focus:ring-royal-gold focus:border-transparent text-base"
+                                                x-model="searchQuery"
+                                                autofocus
+                                            >
+                                            <div class="mt-4 flex space-x-3">
+                                                <button 
+                                                    type="submit"
+                                                    class="flex-1 px-4 py-3 bg-royal-gold text-royal-dark text-sm font-bold tracking-wider uppercase rounded-lg hover:bg-opacity-90 transition-all"
+                                                >
+                                                    Search
+                                                </button>
+                                                <button 
+                                                    type="button" 
+                                                    @click="showSearchModal = false" 
+                                                    class="flex-1 px-4 py-3 border border-stone-200 text-stone-500 text-sm font-bold tracking-wider uppercase rounded-lg hover:bg-stone-50 transition-all"
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -153,8 +230,9 @@
             @endauth
         </nav>
 
-        <main>
-            {{ $slot }}
+        <main class="pb-16 md:pb-0">
+            {{ $slot ?? '' }}
+            @yield('content')
         </main>
 
         <footer class="bg-royal-dark text-stone-400 py-20 mt-20 border-t border-royal-gold/20">
@@ -164,19 +242,28 @@
                     <p class="text-sm leading-relaxed italic font-serif">Crafting timeless elegance for the distinguished few since 1982.</p>
                 </div>
                 <div>
-                    <h4 class="text-white text-xs font-bold uppercase tracking-[0.3em] mb-6">Experience</h4>
-                    <ul class="space-y-4 text-xs tracking-widest">
-                        <li><a href="#" class="hover:text-royal-gold transition-colors">Virtual Concierge</a></li>
-                        <li><a href="#" class="hover:text-royal-gold transition-colors">Private Viewing</a></li>
-                        <li><a href="#" class="hover:text-royal-gold transition-colors">Bespoke Fitting</a></li>
-                    </ul>
+                    <h4 class="text-white text-xs font-bold uppercase tracking-[0.3em] mb-6">Timeless Wisdom</h4>
+                    <div class="space-y-6">
+                        <blockquote class="border-l-2 border-royal-gold pl-4 italic text-sm text-stone-300">
+                            "A man's watch is the jewelry of his soul."
+                            <cite class="block text-[10px] mt-2 text-stone-500 not-italic">— Coco Chanel</cite>
+                        </blockquote>
+                        <blockquote class="border-l-2 border-royal-gold pl-4 italic text-sm text-stone-300">
+                            "Time is what we want most, but what we use worst."
+                            <cite class="block text-[10px] mt-2 text-stone-500 not-italic">— William Penn</cite>
+                        </blockquote>
+                        <blockquote class="border-l-2 border-royal-gold pl-4 italic text-sm text-stone-300">
+                            "The hourglass reminds us that every moment is precious."
+                            <cite class="block text-[10px] mt-2 text-stone-500 not-italic">— Royal Collection</cite>
+                        </blockquote>
+                    </div>
                 </div>
                 <div>
                     <h4 class="text-white text-xs font-bold uppercase tracking-[0.3em] mb-6">Legal</h4>
                     <ul class="space-y-4 text-xs tracking-widest">
-                        <li><a href="#" class="hover:text-royal-gold transition-colors">Privacy Policy</a></li>
-                        <li><a href="#" class="hover:text-royal-gold transition-colors">Terms of Haute Service</a></li>
-                        <li><a href="#" class="hover:text-royal-gold transition-colors">Cookie Concierge</a></li>
+                        <li><a href="{{ route('privacy.policy') }}" class="hover:text-royal-gold transition-colors">Privacy Policy</a></li>
+                        <li><a href="{{ route('terms.conditions') }}" class="hover:text-royal-gold transition-colors">Terms & Conditions</a></li>
+                        <li><a href="{{ route('cookie.policy') }}" class="hover:text-royal-gold transition-colors">Cookie Policy</a></li>
                     </ul>
                 </div>
                 <div>
@@ -196,6 +283,78 @@
             </div>
         </footer>
 
+        <!-- Bottom Navigation for Mobile -->
+        <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-stone-200 shadow-lg z-50 md:hidden">
+            <div class="flex justify-around items-center py-3">
+                <a href="{{ route('home') }}" class="flex flex-col items-center text-royal-dark hover:text-royal-gold transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    <span class="text-[10px] mt-1 uppercase tracking-wider">Home</span>
+                </a>
+                
+                <button @click="showSearchModal = true" class="flex flex-col items-center text-royal-dark hover:text-royal-gold transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <span class="text-[10px] mt-1 uppercase tracking-wider">Search</span>
+                </button>
+                
+                @auth
+                    <a href="{{ route('profile') }}" class="flex flex-col items-center text-royal-dark hover:text-royal-gold transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        <span class="text-[10px] mt-1 uppercase tracking-wider">Profile</span>
+                    </a>
+                @else
+                    <a href="{{ route('login') }}" class="flex flex-col items-center text-royal-dark hover:text-royal-gold transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        <span class="text-[10px] mt-1 uppercase tracking-wider">Profile</span>
+                    </a>
+                @endauth
+                
+                <a href="{{ route('cart') }}" class="flex flex-col items-center text-royal-dark hover:text-royal-gold transition-colors relative">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                    @php $cartCount = count(session()->get('cart', [])); @endphp
+                    @if($cartCount > 0)
+                        <span class="absolute -top-2 -right-2 bg-royal-gold text-white text-[10px] font-bold h-5 w-5 flex items-center justify-center rounded-full">{{ $cartCount }}</span>
+                    @endif
+                    <span class="text-[10px] mt-1 uppercase tracking-wider">Cart</span>
+                </a>
+                
+                @auth
+                    <a href="{{ route('order.history') }}" class="flex flex-col items-center text-royal-dark hover:text-royal-gold transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 002 2h2a2 2 0 002-2" />
+                        </svg>
+                        <span class="text-[10px] mt-1 uppercase tracking-wider">Orders</span>
+                    </a>
+                @else
+                    <a href="{{ route('login') }}" class="flex flex-col items-center text-royal-dark hover:text-royal-gold transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 002 2h2a2 2 0 002-2" />
+                        </svg>
+                        <span class="text-[10px] mt-1 uppercase tracking-wider">Orders</span>
+                    </a>
+                @endauth
+            </div>
+        </div>
+
+        <!-- Alpine.js is included with Livewire, no separate import needed -->
+        
         @livewireScripts
+        <script>
+            // Livewire is now properly configured
+            document.addEventListener('DOMContentLoaded', function() {
+                if (window.Livewire) {
+                    console.log('Livewire loaded successfully');
+                }
+            });
+        </script>
     </body>
 </html>

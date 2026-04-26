@@ -132,9 +132,13 @@
                     @forelse($products as $product)
                         <a href="{{ route('product.detail', $product->id) }}" class="group bg-white rounded-sm border border-stone-200 overflow-hidden hover:shadow-xl transition-all duration-300">
                             <!-- Product Image -->
-                            <div class="aspect-square bg-stone-100 relative overflow-hidden">
-                                @if($product->images && count($product->images) > 0)
-                                    <img src="{{ $product->images[0] }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                             <div class="aspect-square bg-stone-100 relative overflow-hidden">
+                                @php
+                                    $productImage = ($product->images && count($product->images) > 0) ? $product->images[0] : null;
+                                    $productImageUrl = $productImage ? (str_starts_with($productImage, 'http') ? $productImage : asset($productImage)) : null;
+                                @endphp
+                                @if($productImageUrl)
+                                    <img src="{{ $productImageUrl }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center text-stone-400">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">

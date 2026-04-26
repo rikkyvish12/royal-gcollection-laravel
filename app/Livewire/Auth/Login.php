@@ -24,16 +24,23 @@ class Login extends Component
 
         $otpCode = rand(100000, 999999);
         
-        // Store OTP in the new whatsapp_otps table
-        WhatsappOtp::create([
+        // Store OTP in the database
+        $otpRecord = WhatsappOtp::create([
             'mobile_number' => $this->mobile_number,
             'otp' => $otpCode,
             'expires_at' => now()->addMinutes(10),
         ]);
 
         $whatsapp->sendOtp($this->mobile_number, $otpCode);
+        
         $this->showOtpInput = true;
+        
         session()->flash('success', 'OTP has been sent to your WhatsApp.');
+        
+        // In development mode, also show the OTP for manual testing
+        if (config('app.env') === 'local') {
+            session()->flash('dev_otp', 'DEV MODE: Your OTP is ' . $otpCode);
+        }
     }
 
     public function verifyOtp()
@@ -41,7 +48,7 @@ class Login extends Component
         $this->validate([
             'otp' => 'required|numeric|digits:6',
         ]);
-
+        
         $otpRecord = WhatsappOtp::where('mobile_number', $this->mobile_number)
                     ->where('otp', $this->otp)
                     ->where('expires_at', '>', now())

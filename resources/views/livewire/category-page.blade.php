@@ -9,7 +9,11 @@
         @forelse($products as $product)
             <div class="group">
                 <div class="relative aspect-[4/5] overflow-hidden bg-stone-100 mb-8 shadow-2xl">
-                    <img src="{{ isset($product->images[0]) ? $product->images[0] : 'https://via.placeholder.com/800' }}" 
+                    @php
+                        $productImage = isset($product->images[0]) ? $product->images[0] : 'https://via.placeholder.com/800';
+                        $productImageUrl = str_starts_with($productImage, 'http') ? $productImage : asset($productImage);
+                    @endphp
+                    <img src="{{ $productImageUrl }}" 
                          class="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000">
                     
                     <div class="absolute inset-0 bg-royal-dark/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-700 p-8 text-center">

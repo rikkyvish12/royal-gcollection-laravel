@@ -47,6 +47,7 @@ class CategoryResource extends Resource
                 
                 Forms\Components\FileUpload::make('image')
                     ->image()
+                    ->disk('uploads')
                     ->directory('categories')
                     ->imageEditor(),
             ]);
@@ -78,6 +79,7 @@ class CategoryResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
                 
                 Tables\Columns\ImageColumn::make('image')
+                    ->disk('uploads')
                     ->circular(),
                 
                 Tables\Columns\TextColumn::make('products_count')
