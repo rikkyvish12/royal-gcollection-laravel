@@ -1,4 +1,11 @@
 <div class="min-h-screen bg-stone-50">
+    <!-- JSON-LD Schema Markup -->
+    @if(isset($schema))
+        <script type="application/ld+json">
+            {!! $schema !!}
+        </script>
+    @endif
+
     <!-- Page Header -->
     <div class="bg-white border-b border-stone-200 py-12">
         <div class="max-w-7xl mx-auto px-6">

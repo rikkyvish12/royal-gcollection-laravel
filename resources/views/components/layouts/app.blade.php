@@ -4,7 +4,26 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <title>{{ $title ?? 'Royal Collection | Luxury Watches' }}</title>
+        <!-- SEO Meta Tags -->
+        <title>{{ $title ?? 'Royal Collection | Luxury Watches in India - Premium Timepieces' }}</title>
+        <meta name="description" content="{{ $metaDescription ?? 'Discover exclusive luxury watches at Royal Collection. Shop premium timepieces from top brands with lifetime warranty and secure shipping across India.' }}">
+        <meta name="keywords" content="{{ $metaKeywords ?? 'luxury watches, premium watches, designer watches, watch collection, India' }}">
+        <meta name="robots" content="index, follow">
+        <link rel="canonical" href="{{ $canonicalUrl ?? url()->current() }}">
+        
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="{{ $ogType ?? 'website' }}">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:title" content="{{ $ogTitle ?? 'Royal Collection | Luxury Watches in India' }}">
+        <meta property="og:description" content="{{ $ogDescription ?? $metaDescription ?? 'Discover exclusive luxury watches at Royal Collection. Shop premium timepieces from top brands.' }}">
+        <meta property="og:image" content="{{ $ogImage ?? asset('https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?q=80&w=2070') }}">
+        
+        <!-- Twitter -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:url" content="{{ url()->current() }}">
+        <meta name="twitter:title" content="{{ $ogTitle ?? 'Royal Collection | Luxury Watches in India' }}">
+        <meta name="twitter:description" content="{{ $ogDescription ?? $metaDescription ?? 'Discover exclusive luxury watches at Royal Collection.' }}">
+        <meta name="twitter:image" content="{{ $ogImage ?? asset('https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?q=80&w=2070') }}">
         
         <!-- Premium Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -63,6 +82,7 @@
                         <a href="{{ route('super-category', 'women') }}" class="text-royal-dark hover:text-royal-gold transition-colors py-5 border-b-2 border-transparent hover:border-royal-gold">Women</a>
                         <a href="{{ route('super-category', 'smart-watches') }}" class="text-royal-dark hover:text-royal-gold transition-colors py-5 border-b-2 border-transparent hover:border-royal-gold">Smart</a>
                         <a href="{{ route('brands') }}" class="text-royal-dark hover:text-royal-gold transition-colors py-5 border-b-2 border-transparent hover:border-royal-gold">Brands</a>
+                        <a href="{{ route('collections') }}" class="text-royal-gold hover:text-royal-dark transition-colors py-5 border-b-2 border-transparent hover:border-royal-dark font-bold">Collection</a>
                     </div>
 
                     <!-- Right: Search, Wishlist, Profile, Cart -->

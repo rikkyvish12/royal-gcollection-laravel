@@ -106,12 +106,35 @@ class SuperCategoryPage extends Component
         $query->whereBetween('price', [$this->minPrice, $this->maxPrice]);
 
         $products = $query->with('category')->orderBy('name')->paginate(12);
+        
+        // SEO Meta
+        $superCategoryName = $superCategory->name;
+        $title = "{$superCategoryName} Luxury Watches | Shop Premium Timepieces India - Royal Collection";
+        $metaDescription = "Explore our exclusive collection of {$superCategoryName} luxury watches. Find premium timepieces from top brands with lifetime warranty & secure shipping across India.";
+        $metaKeywords = strtolower("{$superCategoryName} watches, luxury watches, premium timepieces, buy {$superCategoryName} watches india");
+        
+        // Canonical URL
+        $canonicalUrl = route('super-category', $this->superCategorySlug);
+        
+        // JSON-LD Schema
+        $schema = [
+            '@context' => 'https://schema.org/',
+            '@type' => 'CollectionPage',
+            'name' => $title,
+            'description' => $metaDescription,
+            'url' => $canonicalUrl
+        ];
 
         return view('livewire.super-category-page', [
             'superCategory' => $superCategory,
             'categories' => $categories,
             'allBrands' => $allBrands,
             'products' => $products,
+            'title' => $title,
+            'metaDescription' => $metaDescription,
+            'metaKeywords' => $metaKeywords,
+            'canonicalUrl' => $canonicalUrl,
+            'schema' => json_encode($schema)
         ])->layout('components.layouts.app');
     }
 }

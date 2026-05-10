@@ -1,4 +1,11 @@
 <div class="animate-fadeIn max-w-7xl mx-auto px-6 py-20">
+    <!-- JSON-LD Schema Markup -->
+    @if(isset($schema))
+        <script type="application/ld+json">
+            {!! $schema !!}
+        </script>
+    @endif
+
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-24">
         <!-- Image Gallery -->
         <div class="relative group">

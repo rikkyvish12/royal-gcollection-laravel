@@ -1,4 +1,11 @@
 <div class="animate-fadeIn">
+    <!-- JSON-LD Schema Markup -->
+    @if(isset($schema))
+        <script type="application/ld+json">
+            {!! $schema !!}
+        </script>
+    @endif
+
     <!-- Hero Section -->
     <section class="relative h-[85vh] flex items-center overflow-hidden royal-gradient">
         <div class="absolute inset-0 opacity-40">
