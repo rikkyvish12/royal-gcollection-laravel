@@ -388,5 +388,36 @@
                 }
             });
         </script>
+        
+        <!-- Custom Analytics Tracking -->
+        <script>
+            // Track page view with additional details
+            document.addEventListener('DOMContentLoaded', function() {
+                const startTime = Date.now();
+                
+                // Track time on page before unload
+                window.addEventListener('beforeunload', function() {
+                    const timeOnPage = Math.round((Date.now() - startTime) / 1000);
+                    
+                    // Send beacon with time on page
+                    if (navigator.sendBeacon) {
+                        const data = new FormData();
+                        data.append('time_on_page', timeOnPage);
+                        data.append('url', window.location.href);
+                        data.append('title', document.title);
+                        
+                        navigator.sendBeacon('/analytics/track', data);
+                    }
+                });
+                
+                // Track outbound clicks
+                document.addEventListener('click', function(e) {
+                    const link = e.target.closest('a');
+                    if (link && link.href && !link.href.startsWith(window.location.origin)) {
+                        console.log('Outbound click:', link.href);
+                    }
+                });
+            });
+        </script>
     </body>
 </html>
