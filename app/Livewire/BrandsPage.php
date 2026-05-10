@@ -72,10 +72,32 @@ class BrandsPage extends Component
         $query->whereBetween('price', [$this->minPrice, $this->maxPrice]);
 
         $products = $query->orderBy('brand')->orderBy('name')->paginate(12);
+        
+        // SEO Meta
+        $title = 'Luxury Watch Brands | Premium Designer Watches India - Royal Collection';
+        $metaDescription = 'Shop luxury watches from top brands including Rolex, Omega, TAG Heuer & more. Explore our curated collection of premium designer watches with lifetime warranty.';
+        $metaKeywords = 'luxury watch brands, designer watches, premium watches, rolex, omega, tag heuer, buy luxury watches india';
+        
+        // Canonical URL
+        $canonicalUrl = route('brands');
+        
+        // JSON-LD Schema
+        $schema = [
+            '@context' => 'https://schema.org/',
+            '@type' => 'CollectionPage',
+            'name' => $title,
+            'description' => $metaDescription,
+            'url' => $canonicalUrl
+        ];
 
         return view('livewire.brands-page', [
             'allBrands' => $allBrands,
             'products' => $products,
+            'title' => $title,
+            'metaDescription' => $metaDescription,
+            'metaKeywords' => $metaKeywords,
+            'canonicalUrl' => $canonicalUrl,
+            'schema' => json_encode($schema)
         ])->layout('components.layouts.app');
     }
 }

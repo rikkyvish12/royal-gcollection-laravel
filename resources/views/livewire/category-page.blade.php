@@ -1,4 +1,11 @@
 <div class="animate-fadeIn max-w-7xl mx-auto px-6 py-20">
+    <!-- JSON-LD Schema Markup -->
+    @if(isset($schema))
+        <script type="application/ld+json">
+            {!! $schema !!}
+        </script>
+    @endif
+
     <div class="flex flex-col items-center mb-24 space-y-6">
         <p class="text-royal-gold text-[10px] tracking-[0.5em] uppercase font-bold">Maison Selection</p>
         <h2 class="font-serif text-5xl md:text-7xl text-center gold-text-gradient">{{ $category->name }}</h2>

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/', \App\Livewire\HomePage::class)->name('home');
 Route::get('/brands', \App\Livewire\BrandsPage::class)->name('brands');
+Route::get('/collections', \App\Livewire\CollectionsPage::class)->name('collections');
 Route::get('/super-category/{slug}', \App\Livewire\SuperCategoryPage::class)->name('super-category');
 Route::get('/category/{slug}', CategoryPage::class)->name('category');
 Route::get('/product/{id}', ProductDetailPage::class)->name('product.detail');
