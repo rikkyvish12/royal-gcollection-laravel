@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use App\Services\WhatsAppService;
 
 class CheckoutPage extends Component
 {
@@ -10,6 +11,7 @@ class CheckoutPage extends Component
     public $payment_method = 'COD';
     public $cartItems = [];
     public $total = 0;
+    public $whatsappOrderUrl = '';
 
     public function mount()
     {
@@ -18,6 +20,7 @@ class CheckoutPage extends Component
             return redirect()->route('cart');
         }
         $this->calculateTotal();
+        $this->generateWhatsAppOrderUrl();
     }
 
     public function calculateTotal()
@@ -25,6 +28,24 @@ class CheckoutPage extends Component
         $this->total = 0;
         foreach($this->cartItems as $item) {
             $this->total += $item['price'] * $item['quantity'];
+        }
+    }
+
+    public function generateWhatsAppOrderUrl()
+    {
+        $whatsAppService = new WhatsAppService();
+        $this->whatsappOrderUrl = $whatsAppService->generateOrderUrl(
+            $this->cartItems,
+            $this->total,
+            $this->shipping_address ?? 'Not provided yet',
+            $this->payment_method
+        );
+    }
+
+    public function updated($propertyName)
+    {
+        if ($propertyName === 'shipping_address' || $propertyName === 'payment_method') {
+            $this->generateWhatsAppOrderUrl();
         }
     }
 

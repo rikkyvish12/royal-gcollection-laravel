@@ -3,15 +3,18 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use App\Services\WhatsAppService;
 
 class ProductDetailPage extends Component
 {
     public $product;
     public $quantity = 1;
+    public $whatsappEnquiryUrl = '';
 
     public function mount($id)
     {
         $this->product = \App\Models\Product::findOrFail($id);
+        $this->generateWhatsAppEnquiryUrl();
     }
 
     public function addToCart()
@@ -34,6 +37,23 @@ class ProductDetailPage extends Component
         session()->put('cart', $cart);
         $this->dispatch('cart-updated');
         session()->flash('success', 'Product added to cart successfully!');
+    }
+
+    public function generateWhatsAppEnquiryUrl()
+    {
+        $whatsAppService = new WhatsAppService();
+        $this->whatsappEnquiryUrl = $whatsAppService->generateEnquiryUrl($this->product);
+        
+        // Debug: Log the product data being passed
+        \Log::info('Product Detail WhatsApp URL Generation', [
+            'product_id' => $this->product->id,
+            'product_name' => $this->product->name,
+            'product_brand' => $this->product->brand,
+            'product_price' => $this->product->price,
+            'product_description' => $this->product->description,
+            'product_stock' => $this->product->stock_quantity,
+            'whatsapp_url' => $this->whatsappEnquiryUrl
+        ]);
     }
 
     public function render()
