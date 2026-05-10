@@ -43,6 +43,13 @@ class AdminPanelProvider extends PanelProvider
                 \App\Filament\Widgets\UsersOverview::class,
                 \App\Filament\Widgets\ProductsOverview::class,
                 \App\Filament\Widgets\OrderTrendsChart::class,
+                \App\Filament\Widgets\AnalyticsOverview::class,
+                \App\Filament\Widgets\VisitorsTrendChart::class,
+                \App\Filament\Widgets\PopularPagesTable::class,
+                \App\Filament\Widgets\DeviceBreakdownChart::class,
+                \App\Filament\Widgets\BrowserBreakdownChart::class,
+                \App\Filament\Widgets\TrafficSourcesChart::class,
+                \App\Filament\Widgets\PeakHoursChart::class,
             ])
             ->middleware([
                 EncryptCookies::class,

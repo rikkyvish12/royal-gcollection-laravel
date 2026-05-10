@@ -14,6 +14,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => \App\Http\Middleware\IsAdmin::class,
         ]);
+        
+        $middleware->web(append: [
+            \App\Http\Middleware\TrackPageViews::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
